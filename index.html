@@ -2,10 +2,22 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
+    <meta
+        name="viewport"
+        content="width=device-width,
+                 initial-scale=1.0,
+                 maximum-scale=1.0,
+                 viewport-fit=cover"
+    >
+
+    <title>Web App</title>
 
     <style>
+        /* ==============================
+           RESET
+        ============================== */
+
         * {
             box-sizing: border-box;
         }
@@ -17,32 +29,152 @@
             width: 100%;
             height: 100%;
             overflow: hidden;
+            background: #000;
         }
 
-        .app {
+
+        /* ==============================
+           APP CONTAINER
+        ============================== */
+
+        .app-container {
+            position: fixed;
+            inset: 0;
+
             width: 100%;
             height: 100dvh;
+
             overflow: hidden;
+
+            background: #000;
         }
 
-        iframe {
+
+        /* ==============================
+           IFRAME
+        ============================== */
+
+        .app-frame {
+            display: block;
+
             width: 100%;
             height: 100%;
+
+            margin: 0;
+            padding: 0;
+
             border: 0;
-            display: block;
+            outline: 0;
+
+            background: #fff;
+        }
+
+
+        /* ==============================
+           MOBILE
+        ============================== */
+
+        @media (max-width: 767px) {
+
+            .app-container {
+                width: 100vw;
+                height: 100dvh;
+
+                height: 100svh;
+                max-height: 100dvh;
+            }
+
+            .app-frame {
+                width: 100%;
+                height: 100%;
+            }
+        }
+
+
+        /* ==============================
+           TABLET / DESKTOP
+        ============================== */
+
+        @media (min-width: 768px) {
+
+            .app-container {
+                width: 100vw;
+                height: 100dvh;
+            }
+
+            .app-frame {
+                width: 100%;
+                height: 100%;
+            }
         }
     </style>
 </head>
 
+
 <body>
 
-<div class="app">
-    <iframe
-        src="https://pat-1.onrender.com"
-        allow="fullscreen"
-        title="Web App">
-    </iframe>
-</div>
+    <div class="app-container">
+
+        <iframe
+            id="appFrame"
+            class="app-frame"
+            src="https://pat-1.onrender.com"
+            title="Web App"
+            allow="
+                fullscreen;
+                payment;
+                autoplay;
+                clipboard-read;
+                clipboard-write
+            "
+            referrerpolicy="strict-origin-when-cross-origin">
+        </iframe>
+
+    </div>
+
+
+    <script>
+        /*
+         * ==========================================
+         * IFRAME NAVIGATION
+         * ==========================================
+         */
+
+        const frame = document.getElementById("appFrame");
+
+
+        /*
+         * Allow the iframe to receive focus
+         */
+        frame.addEventListener("load", () => {
+            console.log("Web app loaded:", frame.src);
+        });
+
+
+        /*
+         * ==========================================
+         * FULLSCREEN
+         * ==========================================
+         */
+
+        window.addEventListener("message", async (event) => {
+
+            if (!event.data) return;
+
+            if (event.data.type === "fullscreen") {
+
+                try {
+
+                    if (frame.requestFullscreen) {
+                        await frame.requestFullscreen();
+                    }
+
+                } catch (error) {
+                    console.log("Fullscreen error:", error);
+                }
+            }
+        });
+    </script>
 
 </body>
 </html>
